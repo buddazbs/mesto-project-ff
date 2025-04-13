@@ -1,3 +1,12 @@
+/**
+ * Модуль с начальными данными карточек
+ * @module cards
+ */
+
+/** 
+ * Массив начальных карточек
+ * @type {Array<{name: string, link: string}>}
+ */
 const initialCards = [
     {
       name: "Архыз",
