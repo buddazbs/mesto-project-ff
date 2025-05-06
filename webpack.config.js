@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: {
@@ -18,6 +19,18 @@ module.exports = {
     open: true,
     compress: true,
     port: 8080
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      "@components": path.resolve(__dirname, 'src/components/'),
+      "@utilities": path.resolve(__dirname, 'src/utilities/'),
+      "@api": path.resolve(__dirname, 'src/services/api/'),
+      "@elements": path.resolve(__dirname, 'src/elements/'),
+      "@images": path.resolve(__dirname, 'src/images/'),
+      "@vendor": path.resolve(__dirname, 'src/vendor/'),
+      "@pages": path.resolve(__dirname, 'src/pages/'),
+    },
   },
   module: {
     rules: [{
@@ -50,6 +63,7 @@ module.exports = {
       template: './src/index.html',
     }),
     new CleanWebpackPlugin(),
+    new Dotenv(),
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
