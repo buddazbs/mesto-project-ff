@@ -5,10 +5,10 @@
 import "@pages/index.css";
 import "@vendor/normalize.css";
 import "@vendor/fonts.css";
-import { validationConfig } from "./config/validation/validation.config.js";
+import { validationConfig } from "@/config/validation/validation.config";
 import { createCard, deleteCard, toggleLike } from "@components/card";
 import { showModal, hideModal, setupModal } from "@components/modal";
-import { cardElements, profileElements, popupElements } from "@elements/dom/index";
+import { cardElements, profileElements, popupElements } from "@elements/dom";
 import { clearValidation, enableValidation } from "@utilities/validation/validation";
 import { profileApi, cardsApi } from "@api/api";
 
@@ -93,7 +93,6 @@ const renderCard = (cardData, prepend = false) => {
 
 /**
  * Обработчик клика по кнопке редактирования профиля
- * @param {Event} evt - Событие клика
  */
 const handleEditProfileClick = () => {
   profileElements.nameInput.value = profileElements.profileTitle.textContent;
@@ -104,7 +103,6 @@ const handleEditProfileClick = () => {
 
 /**
  * Обработчик клика по кнопке добавления карточки
- * @param {Event} evt - Событие клика
  */
 const handleAddCardClick = () => {
   cardElements.addCardForm.reset();
@@ -114,8 +112,6 @@ const handleAddCardClick = () => {
 
 /**
  * Обновляет профиль пользователя
- * @param {string} name - Имя пользователя
- * @param {string} job - Описание пользователя
  */
 const updateProfile = async () => {
   try {
