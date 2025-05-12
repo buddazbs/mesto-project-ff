@@ -6,55 +6,43 @@ import { cardsApi } from "@api/api";
 
 /**
  * Создает DOM-элемент карточки
- * @param {Object} config - Конфигурация карточки
- * @param {string} config.name - Название места
- * @param {string} config.link - URL изображения
- * @param {Array} config.likes - Массив лайков
- * @param {string} config._id - Уникальный идентификатор карточки
- * @param {Object} [config.owner] - Данные владельца
- * @param {string} config.currentUserId - ID текущего пользователя
- * @param {Function} config.deleteCallback - Коллбэк удаления карточки
- * @param {Function} config.likeCallback - Коллбэк лайка карточки
- * @param {Function} config.openImageCallback - Коллбэк открытия изображения
  * @returns {HTMLElement} DOM-элемент карточки
  */
-const createCard = ({ 
-    name, 
-    link, 
-    likes = [], 
-    _id, 
-    owner, 
-    currentUserId, 
-    deleteCallback, 
-    likeCallback, 
-    openImageCallback 
-}) => {
+const createCard = (
+    cardData,
+    currentUserId,
+    handlersCallback
+) => {
+    const { name, link, likes = [], _id, owner } = cardData;
+
     const cardTemplate = document.querySelector('#card-template');
     const cardElement = cardTemplate.content.querySelector('.card').cloneNode(true);
-  
-    // Элементы карточки
+
     const deleteButton = cardElement.querySelector('.card__delete-button');
     const likeButton = cardElement.querySelector('.card__like-button');
     const cardImage = cardElement.querySelector('.card__image');
     const cardTitle = cardElement.querySelector('.card__title');
     const likeCounter = cardElement.querySelector('.card__like-count');
-  
-    // Заполняем данные
+
     cardImage.src = link;
     cardImage.alt = `Фотография места: ${name}`;
     cardTitle.textContent = name;
     likeCounter.textContent = likes.length;
-  
-    // Управление кнопкой удаления
+
     if (!owner || owner._id !== currentUserId) {
         deleteButton.remove();
     }
-  
-    // Обработчики событий
-    deleteButton.addEventListener('click', () => deleteCallback(_id, cardElement));
-    likeButton.addEventListener('click', () => likeCallback(_id, likeButton, likeCounter));
-    cardImage.addEventListener('click', () => openImageCallback({ name, link }));
-  
+
+    deleteButton.addEventListener('click', () =>
+        handlersCallback.deleteCallback(_id, cardElement)
+    );
+    likeButton.addEventListener('click', () =>
+        handlersCallback.likeCallback(_id, likeButton, likeCounter)
+    );
+    cardImage.addEventListener('click', () =>
+        handlersCallback.openImageCallback({ name, link })
+    );
+
     return cardElement;
 };
 

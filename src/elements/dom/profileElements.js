@@ -8,5 +8,7 @@ export const profileElements = {
     profileAvatar: document.querySelector(".profile__image"),
     avatarPopup: document.querySelector(".popup_type_new_avatar"),
     avatarSubmitButton: document.querySelector(".popup_type_new_avatar .popup__button"),
-    avatarInput: document.querySelector(".popup_type_new_avatar .popup__input_type_avatar")
-  };
+    avatarInput: document.querySelector(".popup_type_new_avatar .popup__input_type_avatar"),
+    editProfileForm: document.querySelector(".popup_type_edit .popup__form"),
+    avatarForm: document.querySelector(".popup_type_new_avatar .popup__form")
+};
