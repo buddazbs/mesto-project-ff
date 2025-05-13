@@ -3,5 +3,6 @@ export const cardElements = {
   addCardButton: document.querySelector(".profile__add-button"),
   addCardForm: document.querySelector(".popup__form[name='new-place']"),
   cardNameInput: document.querySelector(".popup__input_type_card-name"),
-  cardLinkInput: document.querySelector(".popup__input_type_url")
+  cardLinkInput: document.querySelector(".popup__input_type_url"),
+  addCardSubmitButton: document.querySelector(".popup__form[name='new-place'] .popup__button"),
 };

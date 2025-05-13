@@ -1,4 +1,3 @@
-import { validationConfig } from "../../config/validation/validation.config.js";
 /**
  * Создает функцию для отображения ошибки ввода.
  * @param {Object} errorElements - Объект, содержащий элементы ошибок для каждого поля ввода.
@@ -100,7 +99,7 @@ const setEventListeners = (popupFormElement, validationConfig) => {
 /**
  * Включает валидацию для всех форм на странице.
  */
-const enableValidation = () => {
+const enableValidation = (validationConfig) => {
   Array.from(
     document.querySelectorAll(validationConfig.popupFormElement)
   ).forEach((popupFormElement) =>
@@ -111,8 +110,9 @@ const enableValidation = () => {
 /**
  * Очищает валидацию для формы.
  * @param {HTMLElement} popupFormElement - Элемент формы.
+ * @param {Object} validationConfig - Конфигурационный объект с классами стилей.
  */
-const clearValidation = (popupFormElement) => {
+const clearValidation = (popupFormElement, validationConfig) => {
   const inputList = Array.from(
     popupFormElement.querySelectorAll(validationConfig.popupInput)
   );
