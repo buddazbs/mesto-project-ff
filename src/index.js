@@ -58,14 +58,37 @@ Promise.all([profileApi.getProfile(), cardsApi.getCards()])
 document.querySelectorAll(".popup").forEach(setupModal);
 
 /**
+ * Универсальный обработчик отправки формы с асинхронным действием
+ * @param {Event} evt - Событие формы
+ * @param {Function} asyncAction - Асинхронная функция, которая выполняет основное действие
+ * @param {HTMLElement} submitButton - Кнопка отправки формы
+ * @param {string} [successCallback] - Функция, вызываемая после успешного выполнения
+ */
+const handleFormSubmission = async (evt, asyncAction, submitButton, successCallback) => {
+    evt.preventDefault();
+    submitButton.textContent = texts.saving;
+
+    try {
+        const result = await asyncAction();
+        if (typeof successCallback === 'function') {
+            successCallback(result);
+        }
+    } catch (err) {
+        console.error("Ошибка при отправке формы:", err);
+    } finally {
+        submitButton.textContent = texts.save;
+    }
+};
+
+/**
  * Рендерит карточку в DOM.
  * @param {Object} card - Объект карточки с сервера
  * @param {string} currentUserId - ID текущего пользователя
- * @param {Object} handlers - Объект с обработчиками
+ * @param {Object} handlersCallback - Объект с обработчиками
  * @param {boolean} [prepend=false] - Добавить в начало списка
  */
-const renderCard = (card, currentUserId, handlers, prepend = false) => {
-    const cardElement = createCard(card, currentUserId, handlers);
+const renderCard = (card, currentUserId, handlersCallback, prepend = false) => {
+    const cardElement = createCard(card, currentUserId, handlersCallback);
     if (prepend) {
         popupElements.placesList.prepend(cardElement);
     } else {
@@ -93,45 +116,20 @@ const handleAddCardClick = () => {
 };
 
 /**
- * Обновляет профиль пользователя
- */
-const updateProfile = async () => {
-    try {
-        popupElements.profileSubmitButton.textContent = texts.saving;
-        const profileData = await profileApi.updateProfile(profileElements.nameInput.value, profileElements.jobInput.value);
-        profileElements.profileTitle.textContent = profileData.name;
-        profileElements.profileDescription.textContent = profileData.about;
-        hideModal(profileElements.editProfilePopup);
-    } catch (err) {
-        console.error("Ошибка при обновлении профиля:", err);
-    } finally {
-        popupElements.profileSubmitButton.textContent = texts.save;
-    }
-};
-
-/**
  * Обрабатывает отправку формы профиля
  * @param {Event} evt - Событие отправки формы
  */
 const handleFormSubmitEdit = (evt) => {
-    evt.preventDefault();
-    updateProfile();
-};
-
-/**
- * Обновляет аватар пользователя
- */
-const updateProfileAvatar = async () => {
-    try {
-        profileElements.avatarSubmitButton.textContent = texts.saving;
-        const profileAvatar = await profileApi.updateAvatar(profileElements.avatarInput.value);
-        profileElements.profileAvatar.style.backgroundImage = `url(${profileAvatar.avatar})`;
-        hideModal(profileElements.avatarPopup);
-    } catch (err) {
-        console.error("Ошибка при обновлении аватара:", err);
-    } finally {
-        profileElements.avatarSubmitButton.textContent = texts.save;
-    }
+    handleFormSubmission(
+        evt,
+        () => profileApi.updateProfile(profileElements.nameInput.value, profileElements.jobInput.value),
+        popupElements.profileSubmitButton,
+        (profileData) => {
+            profileElements.profileTitle.textContent = profileData.name;
+            profileElements.profileDescription.textContent = profileData.about;
+            hideModal(profileElements.editProfilePopup);
+        }
+    );
 };
 
 /**
@@ -148,8 +146,15 @@ const handleEditProfileAvatar = (evt) => {
  * @param {Event} evt - Событие отправки формы
  */
 const handleAvatarFormSubmit = (evt) => {
-    evt.preventDefault();
-    updateProfileAvatar();
+    handleFormSubmission(
+        evt,
+        () => profileApi.updateAvatar(profileElements.avatarInput.value),
+        profileElements.avatarSubmitButton,
+        (profileAvatar) => {
+            profileElements.profileAvatar.style.backgroundImage = `url(${profileAvatar.avatar})`;
+            hideModal(profileElements.avatarPopup);
+        }
+    );
 };
 
 /**
@@ -157,16 +162,21 @@ const handleAvatarFormSubmit = (evt) => {
  * @param {Event} evt - Событие отправки формы
  */
 const handleFormSubmitAdd = (evt) => {
-    evt.preventDefault();
-    cardsApi
-        .createCard(cardElements.cardNameInput.value, cardElements.cardLinkInput.value)
-        .then((newCard) => {
-            renderCard(newCard, profileElements.profileId, handlers, true);
+    handleFormSubmission(
+        evt,
+        () => cardsApi.createCard(
+            cardElements.cardNameInput.value,
+            cardElements.cardLinkInput.value
+        ),
+        cardElements.addCardSubmitButton,
+        (newCard) => {
+            renderCard(newCard, profileElements.profileId, handlersCallback, true);
             cardElements.addCardForm.reset();
             hideModal(cardElements.addCardPopup);
-        })
-        .catch(console.error);
+        }
+    );
 };
+
 
 // Привязка обработчиков событий
 profileElements.profileAvatar.addEventListener("click", handleEditProfileAvatar);
