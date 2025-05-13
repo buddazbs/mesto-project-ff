@@ -24,6 +24,8 @@
 .card__like-button_is-active{background:transparent url(images/like-active.svg) no-repeat}
 .card__delete-button{background:transparent url(images/delete-icon.svg) 50% no-repeat;background-size:18px 18px;border:none;cursor:pointer;height:18px;margin:0;padding:0;position:absolute;right:15px;top:18px;transition:.3s;width:18px}.card__delete-button:hover{opacity:.6}
 .card__title{font-size:24px;line-height:29px;margin:0;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card__like-area{align-items:center;display:flex;flex-direction:column}
+.card__like-count{font-size:13px;line-height:16px;margin:0;text-align:center}
 .card{border-radius:10px;font-family:Inter,Arial,sans-serif;overflow:hidden;position:relative}
 .popup__content{background-color:#fff;border-radius:10px;box-sizing:border-box;max-width:430px;min-height:330px;padding:34px 36px;position:relative;width:100%}@media screen and (max-width:568px){.popup__content{margin-top:40px;max-width:calc(100% - 80px);padding:30px 20px;width:100%}}
 .popup__content_content_image{background:transparent;background-size:cover;border-radius:0;display:flex;height:auto;max-height:75vh;max-width:75vw;padding:0;width:auto}
