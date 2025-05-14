@@ -28,7 +28,6 @@ const createCard = (
     cardImage.alt = `Фотография места: ${name}`;
     cardTitle.textContent = name;
     likeCounter.textContent = likes.length;
-    console.log(cardData)
 
     const currentUserLiked = likes.some((user) => user._id === currentUserId);
     if (currentUserLiked) {
