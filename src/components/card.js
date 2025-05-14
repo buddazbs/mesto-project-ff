@@ -28,6 +28,12 @@ const createCard = (
     cardImage.alt = `Фотография места: ${name}`;
     cardTitle.textContent = name;
     likeCounter.textContent = likes.length;
+    console.log(cardData)
+
+    const currentUserLiked = likes.some((user) => user._id === currentUserId);
+    if (currentUserLiked) {
+        likeButton.classList.add("card__like-button_is-active");
+    }
 
     if (!owner || owner._id !== currentUserId) {
         deleteButton.remove();
